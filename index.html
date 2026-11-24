@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SkinChem Lab is an interactive student project exploring the applied chemistry behind skincare ingredients, pH, skin barrier science and cosmetic formulations.">
+  <title>SkinChem Lab — The Science of Skin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #f8f5ef;
+      --paper: #fffdf9;
+      --ink: #302923;
+      --muted: #786d63;
+      --rose: #b77d72;
+      --rose-dark: #8f5d55;
+      --blush: #ead8d1;
+      --sage: #dce4d8;
+      --line: #e8e0d7;
+      --shadow: 0 18px 50px rgba(66, 48, 38, .08);
+      --serif: "Playfair Display", Georgia, serif;
+      --sans: "DM Sans", Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+    body { margin: 0; background: var(--cream); color: var(--ink); font-family: var(--sans); line-height: 1.65; }
+    a { color: inherit; }
+    button, input { font: inherit; }
+    .topbar { position: sticky; top: 0; z-index: 20; background: rgba(248,245,239,.92); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(232,224,215,.8); }
+    .nav { max-width: 1160px; margin: auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { text-decoration: none; font-family: var(--serif); font-size: 1.45rem; font-weight: 700; letter-spacing: -.7px; white-space: nowrap; }
+    .brand span { color: var(--rose); }
+    .navlinks { display: flex; gap: 22px; align-items: center; }
+    .navlinks a { font-size: .82rem; color: var(--muted); text-decoration: none; font-weight: 600; }
+    .navlinks a:hover { color: var(--rose-dark); }
+    .menu-btn { display: none; border: 1px solid var(--line); background: var(--paper); border-radius: 999px; padding: 8px 13px; color: var(--ink); }
+    .wrap { max-width: 1160px; margin: auto; padding: 0 24px; }
+    .hero { padding: 72px 0 66px; display: grid; grid-template-columns: 1.08fr .92fr; align-items: center; gap: 50px; }
+    .eyebrow { color: var(--rose-dark); font-size: .72rem; letter-spacing: .19em; text-transform: uppercase; font-weight: 700; }
+    h1,h2,h3 { font-family: var(--serif); line-height: 1.13; font-weight: 600; }
+    h1 { font-size: clamp(3rem, 6.3vw, 5.6rem); letter-spacing: -2.8px; margin: 16px 0 20px; }
+    h1 em { color: var(--rose); font-weight: 500; }
+    .hero-copy { max-width: 550px; color: var(--muted); font-size: 1.03rem; }
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 19px; border-radius: 999px; text-decoration: none; border: 1px solid var(--rose-dark); background: var(--rose-dark); color: white; font-weight: 700; font-size: .86rem; transition: .2s; cursor: pointer; }
+    .btn:hover { transform: translateY(-2px); background: #754942; }
+    .btn.secondary { background: transparent; color: var(--rose-dark); }
+    .hero-art { min-height: 430px; border-radius: 230px 230px 24px 24px; background: linear-gradient(145deg,#e9d8ce,#f1e8dc 48%,#d9dfd1); position: relative; overflow: hidden; box-shadow: var(--shadow); display: grid; place-items: center; }
+    .orb { position: absolute; width: 270px; height: 270px; border-radius: 50%; background: rgba(255,253,249,.53); top: 65px; left: 50%; transform: translateX(-50%); }
+    .bottle { position: relative; width: 145px; height: 220px; border-radius: 28px 28px 36px 36px; background: linear-gradient(90deg,#c99e8f,#f6e8dc 45%,#c99e8f); box-shadow: 20px 22px 28px rgba(85,61,48,.18); margin-top: 50px; display: flex; align-items: center; justify-content: center; }
+    .bottle:before { content:""; position:absolute; width:56px; height:38px; background:#8c6a5e; top:-36px; border-radius:8px 8px 2px 2px; }
+    .bottle:after { content:""; position:absolute; width:72px; height:12px; background:#b78e7e; top:-43px; border-radius:6px; }
+    .bottle-label { text-align:center; font-family:var(--serif); color:#614b41; line-height:1.25; font-size:1rem; }
+    .bottle-label small { display:block; font: .48rem var(--sans); letter-spacing:.15em; margin-top:7px; }
+    .floating { position:absolute; background:rgba(255,253,249,.82); border:1px solid rgba(255,255,255,.8); padding:10px 14px; border-radius:14px; box-shadow:var(--shadow); color:#66584e; font-size:.75rem; font-weight:700; }
+    .float-one { top:70px; left:25px; transform:rotate(-6deg); }
+    .float-two { right:20px; bottom:75px; transform:rotate(5deg); }
+    .hero-note { font-size:.72rem; color:var(--muted); margin-top:14px; }
+    section { padding: 76px 0; }
+    .section-head { max-width: 680px; margin-bottom: 34px; }
+    .section-head h2 { font-size: clamp(2.1rem,4vw,3.2rem); margin: 10px 0 12px; letter-spacing:-1px; }
+    .section-head p { color:var(--muted); margin:0; }
+    .intro-strip { background:#eee5dc; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+    .strip-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; padding:25px 0; }
+    .strip-item { display:flex; gap:13px; align-items:center; }
+    .strip-icon { width:42px;height:42px; border-radius:50%; background:var(--paper); display:grid; place-items:center; font-size:1.2rem; flex:none; }
+    .strip-item strong { display:block; font-family:var(--serif); font-size:1.05rem; }
+    .strip-item span { color:var(--muted); font-size:.78rem; }
+    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+    .card { background:var(--paper); border:1px solid var(--line); border-radius:19px; padding:23px; box-shadow:0 8px 28px rgba(66,48,38,.035); }
+    .card-top { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:14px; }
+    .chip { background:#f2e5df; color:var(--rose-dark); border-radius:999px; padding:5px 10px; font-size:.67rem; font-weight:700; letter-spacing:.04em; }
+    .molecule { width:43px;height:43px; border-radius:14px; display:grid; place-items:center; background:#e7ecdf; color:#5d705b; font-family:var(--serif); font-size:1.15rem; }
+    .card h3 { font-size:1.45rem; margin:0 0 7px; }
+    .card p { color:var(--muted); font-size:.87rem; margin:0 0 13px; }
+    .fact { border-top:1px solid var(--line); padding-top:12px; font-size:.77rem; color:#65594f; }
+    .fact b { color:var(--ink); }
+    .search-row { display:flex; gap:10px; margin:0 0 20px; max-width:520px; }
+    .search-row input { width:100%; border:1px solid var(--line); border-radius:999px; padding:12px 17px; background:var(--paper); outline:none; }
+    .search-row input:focus { border-color:var(--rose); box-shadow:0 0 0 3px rgba(183,125,114,.12); }
+    .ph-section { background:#e9e9df; }
+    .ph-layout { display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center; }
+    .ph-panel { background:var(--paper); border-radius:22px; padding:28px; box-shadow:var(--shadow); }
+    .ph-number { font-family:var(--serif); font-size:4.5rem; line-height:1; color:var(--rose-dark); }
+    .ph-track { display:flex; height:16px; border-radius:999px; overflow:hidden; margin:22px 0 10px; background:linear-gradient(90deg,#d66d66,#e7a26b,#e9d27c,#b9cf8b,#79b5a5,#7299bc,#877bb2); }
+    .ph-scale { display:flex; justify-content:space-between; color:var(--muted); font-size:.7rem; }
+    input[type=range] { width:100%; accent-color:var(--rose-dark); margin:22px 0 6px; cursor:pointer; }
+    .ph-description { color:var(--muted); font-size:.87rem; min-height:50px; }
+    .note { background:rgba(255,253,249,.65); border-left:3px solid var(--rose); padding:13px 15px; color:#665b51; font-size:.8rem; border-radius:0 10px 10px 0; margin-top:17px; }
+    .science-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .science-card { background:var(--paper); border:1px solid var(--line); border-radius:20px; padding:25px; }
+    .science-card h3 { margin:0 0 9px; font-size:1.4rem; }
+    .science-card p { color:var(--muted); font-size:.86rem; margin:0; }
+    .mini-label { color:var(--rose-dark); font-size:.67rem; letter-spacing:.14em; font-weight:700; text-transform:uppercase; margin-bottom:10px; display:block; }
+    .quiz-section { background:#f0e5df; }
+    .quiz-box { max-width:760px; background:var(--paper); border-radius:22px; padding:30px; box-shadow:var(--shadow); }
+    .quiz-question { font-family:var(--serif); font-size:1.55rem; margin:8px 0 20px; }
+    .answers { display:grid; gap:10px; }
+    .answer { text-align:left; border:1px solid var(--line); background:#fffdfa; border-radius:12px; padding:13px 15px; cursor:pointer; color:var(--ink); }
+    .answer:hover { border-color:var(--rose); background:#fbf4f0; }
+    .answer.correct { border-color:#799477; background:#edf4ea; }
+    .answer.wrong { border-color:#c47b70; background:#fbefed; }
+    #feedback { min-height:28px; margin-top:14px; color:var(--muted); font-size:.85rem; }
+    .quiz-controls { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:15px; }
+    .quiz-controls button { border:0; }
+    .sources { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+    .source { display:block; text-decoration:none; background:var(--paper); border:1px solid var(--line); padding:16px 18px; border-radius:13px; font-size:.82rem; }
+    .source:hover { border-color:var(--rose); }
+    .source span { display:block; color:var(--muted); font-size:.72rem; margin-top:3px; }
+    footer { background:#332b26; color:#f8f3ed; padding:36px 0; }
+    .footer-inner { display:flex; justify-content:space-between; gap:25px; align-items:center; }
+    footer p { color:#c9bdb3; font-size:.77rem; margin:6px 0 0; }
+    .disclaimer { font-size:.72rem; color:#c9bdb3; max-width:580px; }
+    .hidden { display:none !important; }
+    @media(max-width:800px) {
+      .navlinks { display:none; position:absolute; top:62px; left:0; right:0; padding:18px 24px; background:var(--cream); border-bottom:1px solid var(--line); flex-direction:column; align-items:flex-start; }
+      .navlinks.open { display:flex; }
+      .menu-btn { display:block; }
+      .hero { grid-template-columns:1fr; padding-top:48px; gap:30px; }
+      .hero-art { min-height:350px; }
+      .grid { grid-template-columns:repeat(2,1fr); }
+      .ph-layout { grid-template-columns:1fr; }
+      .strip-grid { grid-template-columns:1fr; gap:15px; }
+    }
+    @media(max-width:540px) {
+      .wrap { padding:0 18px; }
+      .nav { padding:12px 18px; }
+      h1 { font-size:3.25rem; }
+      section { padding:58px 0; }
+      .grid,.science-grid,.sources { grid-template-columns:1fr; }
+      .hero-art { min-height:310px; }
+      .footer-inner { flex-direction:column; align-items:flex-start; }
+      .quiz-box { padding:22px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav">
+      <a class="brand" href="#home">skin<span>chem.</span></a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open navigation" aria-expanded="false">Menu ☰</button>
+      <div class="navlinks" id="navLinks">
+        <a href="#ingredients">Ingredients</a><a href="#phlab">pH Lab</a><a href="#skin">Skin Science</a><a href="#formulation">Formulations</a><a href="#quiz">Quick Quiz</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="wrap" id="home">
+      <section class="hero">
+        <div>
+          <div class="eyebrow">An interactive applied chemistry project</div>
+          <h1>Beauty is an art.<br><em>Skincare is chemistry.</em></h1>
+          <p class="hero-copy">Ever wondered what makes a moisturiser feel silky, why cleansers lift away oil, or what pH has to do with your skin? Step inside the science behind everyday skincare.</p>
+          <div class="actions"><a class="btn" href="#ingredients">Explore the lab ↗</a><a class="btn secondary" href="#phlab">Try the pH scale</a></div>
+          <p class="hero-note">A student-made guide to cosmetic chemistry · Learn, explore, question</p>
+        </div>
+        <div class="hero-art" aria-label="Illustration of a skincare serum bottle">
+          <div class="orb"></div><div class="floating float-one">FORMULATED WITH SCIENCE</div>
+          <div class="bottle"><div class="bottle-label">skinchem<small>THE SCIENCE OF SKIN</small></div></div>
+          <div class="floating float-two">pH · MOLECULES · FORMULAS</div>
+        </div>
+      </section>
+    </div>
+
+    <div class="intro-strip">
+      <div class="wrap strip-grid">
+        <div class="strip-item"><div class="strip-icon">⚗</div><div><strong>Ingredient chemistry</strong><span>Meet the molecules in skincare</span></div></div>
+        <div class="strip-item"><div class="strip-icon">◉</div><div><strong>Interactive learning</strong><span>Explore pH and test your knowledge</span></div></div>
+        <div class="strip-item"><div class="strip-icon">✳</div><div><strong>Everyday applications</strong><span>Connect chemistry to real products</span></div></div>
+      </div>
+    </div>
+
+    <section id="ingredients">
+      <div class="wrap">
+        <div class="section-head"><div class="eyebrow">01 / Ingredient library</div><h2>Meet the molecules.</h2><p>Skincare ingredients are selected for the roles they play in a formulation. Search the mini-library to explore a few well-known examples.</p></div>
+        <div class="search-row"><input id="ingredientSearch" type="search" placeholder="Search an ingredient or function…" aria-label="Search ingredients"></div>
+        <div class="grid" id="ingredientGrid">
+          <article class="card ingredient" data-search="glycerin glycerol humectant hydration water">
+            <div class="card-top"><span class="chip">HUMECTANT</span><div class="molecule">OH</div></div>
+            <h3>Glycerin</h3><p>Also known as glycerol, this small, water-attracting molecule is widely used to help keep formulations and the outer skin layer hydrated.</p>
+            <div class="fact"><b>Chemistry note:</b> A triol — it contains three hydroxyl (–OH) groups.</div>
+          </article>
+          <article class="card ingredient" data-search="hyaluronic acid humectant hydration polymer">
+            <div class="card-top"><span class="chip">HUMECTANT</span><div class="molecule">HA</div></div>
+            <h3>Hyaluronic Acid</h3><p>A naturally occurring polysaccharide found in the body. In skincare, it is used as a water-binding ingredient.</p>
+            <div class="fact"><b>Chemistry note:</b> A large carbohydrate-based polymer made of repeating units.</div>
+          </article>
+          <article class="card ingredient" data-search="niacinamide vitamin b3 skin barrier">
+            <div class="card-top"><span class="chip">VITAMIN</span><div class="molecule">B₃</div></div>
+            <h3>Niacinamide</h3><p>A form of vitamin B3 used in cosmetic formulations. It is studied for several skin-related functions, including supporting the skin barrier.</p>
+            <div class="fact"><b>Chemistry note:</b> Also called nicotinamide; it is a water-soluble vitamin.</div>
+          </article>
+          <article class="card ingredient" data-search="ceramides lipid skin barrier fats">
+            <div class="card-top"><span class="chip">SKIN LIPID</span><div class="molecule">脂</div></div>
+            <h3>Ceramides</h3><p>A family of lipid molecules naturally present in the outer skin layer. They help form part of the barrier that reduces water loss.</p>
+            <div class="fact"><b>Chemistry note:</b> Built from a sphingoid base linked to a fatty acid.</div>
+          </article>
+          <article class="card ingredient" data-search="salicylic acid beta hydroxy acid bha exfoliant">
+            <div class="card-top"><span class="chip">BETA-HYDROXY ACID</span><div class="molecule">COOH</div></div>
+            <h3>Salicylic Acid</h3><p>An aromatic organic acid used in some cosmetic products. Its chemical properties help explain its role in exfoliating formulations.</p>
+            <div class="fact"><b>Chemistry note:</b> Contains both a carboxylic acid group and a phenolic hydroxyl group.</div>
+          </article>
+          <article class="card ingredient" data-search="zinc oxide mineral uv filter sunscreen">
+            <div class="card-top"><span class="chip">MINERAL UV FILTER</span><div class="molecule">ZnO</div></div>
+            <h3>Zinc Oxide</h3><p>An inorganic compound used as a UV filter in some sunscreens. It helps protect skin by attenuating ultraviolet radiation.</p>
+            <div class="fact"><b>Chemistry note:</b> An ionic compound made of zinc and oxygen.</div>
+          </article>
+        </div>
+        <p id="noResults" class="note hidden">No ingredient found. Try a different keyword.</p>
+      </div>
+    </section>
+
+    <section class="ph-section" id="phlab">
+      <div class="wrap ph-layout">
+        <div>
+          <div class="eyebrow">02 / The pH lab</div>
+          <h2 style="font-family:var(--serif);font-size:clamp(2.2rem,4vw,3.3rem);line-height:1.12;margin:12px 0">A little number.<br>A big chemical idea.</h2>
+          <p style="color:var(--muted)">pH is a measure related to the hydrogen-ion activity of a solution. The familiar scale runs from acidic to alkaline, with 7 considered neutral at around room temperature.</p>
+          <div class="note"><b>Why it matters:</b> The skin surface is mildly acidic, often described around pH 4.5–5.5, although values vary with body site, age, environment and measurement method.</div>
+        </div>
+        <div class="ph-panel">
+          <div class="eyebrow">Move the slider to explore</div>
+          <div class="ph-number" id="phValue">5.0</div>
+          <div class="ph-track" aria-hidden="true"></div>
+          <div class="ph-scale"><span>0 · Acidic</span><span>7 · Neutral</span><span>14 · Alkaline</span></div>
+          <input id="phSlider" type="range" min="0" max="14" step=".5" value="5" aria-label="Choose a pH value">
+          <h3 id="phTitle" style="margin:8px 0 4px;font-size:1.35rem">Mildly acidic</h3>
+          <p class="ph-description" id="phDescription">This is within the commonly cited range for the skin's surface pH. The exact value varies between people and body areas.</p>
+          <div class="note" id="phExample">Explore: many skin-surface measurements fall in a mildly acidic range.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="skin">
+      <div class="wrap">
+        <div class="section-head"><div class="eyebrow">03 / Skin science</div><h2>Your skin is a living interface.</h2><p>The outermost layer is not just a covering. It helps limit water loss and acts as a protective barrier between the body and its environment.</p></div>
+        <div class="science-grid">
+          <article class="science-card"><span class="mini-label">The barrier</span><h3>Cells + lipids</h3><p>The outer skin layer (stratum corneum) is often compared to a “bricks and mortar” structure: corneocytes are the bricks, while surrounding lipids help fill the spaces between them.</p></article>
+          <article class="science-card"><span class="mini-label">Water balance</span><h3>Humectants</h3><p>Humectants such as glycerin attract and hold water. They are used in moisturisers to help improve hydration in the outer skin layer.</p></article>
+          <article class="science-card"><span class="mini-label">Oil + water</span><h3>Why formulation matters</h3><p>Water and oil do not naturally mix into a stable, uniform blend. Cosmetic formulators use emulsifiers to help create and stabilise emulsions.</p></article>
+          <article class="science-card"><span class="mini-label">Cleansing</span><h3>Surfactants</h3><p>Surfactant molecules have a water-attracting part and an oil-attracting part. This helps them loosen oily soil so it can be rinsed away with water.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="formulation" style="background:#f1eee7">
+      <div class="wrap">
+        <div class="section-head"><div class="eyebrow">04 / Formulation science</div><h2>From molecules to moisturiser.</h2><p>A finished cosmetic product is more than a list of ingredients. Formulation chemistry is about how ingredients work together to create a stable, usable product.</p></div>
+        <div class="grid">
+          <article class="card"><div class="card-top"><span class="chip">MIXTURES</span><div class="molecule">O/W</div></div><h3>Emulsions</h3><p>An emulsion is a mixture of two liquids that normally do not mix, where one is dispersed as droplets in the other. Creams and lotions often use emulsion systems.</p><div class="fact"><b>Applied chemistry:</b> Interfacial tension, droplet size and emulsion stability.</div></article>
+          <article class="card"><div class="card-top"><span class="chip">SURFACE CHEMISTRY</span><div class="molecule">↔</div></div><h3>Surfactants</h3><p>Surfactants can reduce surface or interfacial tension. Their amphiphilic structure gives them both hydrophilic and lipophilic regions.</p><div class="fact"><b>Applied chemistry:</b> Micelles and cleansing action.</div></article>
+          <article class="card"><div class="card-top"><span class="chip">PRODUCT STABILITY</span><div class="molecule">✓</div></div><h3>Preservation</h3><p>Water-containing products can support microbial growth. Appropriate preservation systems help protect product quality when selected and tested correctly.</p><div class="fact"><b>Applied chemistry:</b> Formulation compatibility and stability testing.</div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="quiz-section" id="quiz">
+      <div class="wrap">
+        <div class="section-head"><div class="eyebrow">05 / Myth or molecule?</div><h2>Test your chemistry instincts.</h2><p>Five quick questions. Choose an answer to see the explanation.</p></div>
+        <div class="quiz-box">
+          <div class="card-top"><span class="chip" id="quizProgress">QUESTION 1 OF 5</span><span style="font-size:.75rem;color:var(--muted)" id="score">Score: 0</span></div>
+          <div class="quiz-question" id="question">Which ingredient is commonly classified as a humectant?</div>
+          <div class="answers" id="answers"></div>
+          <div id="feedback" aria-live="polite"></div>
+          <div class="quiz-controls"><span style="font-size:.75rem;color:var(--muted)">Learn as you go</span><button class="btn" id="nextBtn" disabled>Next question →</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="references">
+      <div class="wrap">
+        <div class="section-head"><div class="eyebrow">06 / Learn more</div><h2>Follow the science.</h2><p>These references are starting points for learning more. Information on this website is educational and simplified for a student project.</p></div>
+        <div class="sources">
+          <a class="source" href="https://www.fda.gov/cosmetics" target="_blank" rel="noopener">U.S. FDA — Cosmetics<span>Cosmetic products, ingredients and regulation</span></a>
+          <a class="source" href="https://www.aad.org/public/everyday-care/skin-care-basics" target="_blank" rel="noopener">American Academy of Dermatology<span>Skin-care basics and public education</span></a>
+          <a class="source" href="https://pubchem.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">PubChem — NIH<span>Chemical structures and compound information</span></a>
+          <a class="source" href="https://www.ncbi.nlm.nih.gov/pmc/" target="_blank" rel="noopener">PubMed Central — NIH<span>Open-access biomedical research articles</span></a>
+        </div>
+        <div class="note" style="margin-top:20px"><b>Project note:</b> This website is an educational overview, not medical advice. Ingredient effects depend on concentration, formulation, product quality and individual factors. Always consult qualified professionals for personal skin concerns.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <div><a class="brand" href="#home" style="color:#fff">skin<span>chem.</span></a><p>The science behind everyday skincare.</p></div>
+      <div class="disclaimer">Created as an Applied Chemistry educational project. Content is simplified for learning and should not be used to diagnose or treat skin conditions.</div>
+    </div>
+  </footer>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const navLinks = document.getElementById('navLinks');
+    menuBtn.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', String(open));
+    });
+    navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+    }));
+
+    const search = document.getElementById('ingredientSearch');
+    const ingredientCards = [...document.querySelectorAll('.ingredient')];
+    const noResults = document.getElementById('noResults');
+    search.addEventListener('input', () => {
+      const term = search.value.toLowerCase().trim();
+      let visible = 0;
+      ingredientCards.forEach(card => {
+        const match = (card.innerText + ' ' + card.dataset.search).toLowerCase().includes(term);
+        card.classList.toggle('hidden', !match);
+        if (match) visible++;
+      });
+      noResults.classList.toggle('hidden', visible !== 0);
+    });
+
+    const phSlider = document.getElementById('phSlider');
+    const phValue = document.getElementById('phValue');
+    const phTitle = document.getElementById('phTitle');
+    const phDescription = document.getElementById('phDescription');
+    const phExample = document.getElementById('phExample');
+    function updatePH() {
+      const value = Number(phSlider.value);
+      phValue.textContent = value.toFixed(1);
+      if (value < 6.5) {
+        phTitle.textContent = value < 3 ? 'Strongly acidic' : value < 5.5 ? 'Acidic' : 'Slightly acidic';
+        phDescription.textContent = 'A pH below 7 is acidic. Lower pH values correspond to greater hydrogen-ion activity in the conventional pH description.';
+        phExample.textContent = value >= 4.5 && value <= 5.5
+          ? 'Explore: this falls within the commonly cited mildly acidic range of skin-surface pH.'
+          : 'Everyday example: lemon juice is acidic. Actual pH depends on its composition and concentration.';
+      } else if (value <= 7.5) {
+        phTitle.textContent = 'Approximately neutral';
+        phDescription.textContent = 'A pH near 7 is considered neutral at around room temperature. Pure water is commonly used as the reference example.';
+        phExample.textContent = 'Explore: neutral does not mean “best” for every product or every application.';
+      } else {
+        phTitle.textContent = value > 11 ? 'Strongly alkaline' : 'Alkaline';
+        phDescription.textContent = 'A pH above 7 is alkaline (basic). Higher pH values indicate lower hydrogen-ion activity in the conventional pH description.';
+        phExample.textContent = 'Everyday example: some cleaning solutions are alkaline. Never experiment with household chemicals on skin.';
+      }
+    }
+    phSlider.addEventListener('input', updatePH);
+    updatePH();
+
+    const questions = [
+      { q:'Which ingredient is commonly classified as a humectant?', a:['Glycerin','Zinc oxide','Ceramide'], correct:0, why:'Glycerin is a humectant: it attracts and holds water.' },
+      { q:'A solution with pH 3 is best described as…', a:['Neutral','Acidic','Alkaline'], correct:1, why:'Values below 7 are acidic on the conventional pH scale.' },
+      { q:'Why are emulsifiers used in many creams?', a:['To add fragrance','To help oil and water form a stable mixture','To change every ingredient into a solid'], correct:1, why:'Emulsifiers help stabilise mixtures of oil and water, which otherwise tend to separate.' },
+      { q:'What does “amphiphilic” mean for a surfactant?', a:['It has water-attracting and oil-attracting regions','It only dissolves in oil','It contains no carbon'], correct:0, why:'Amphiphilic molecules have both hydrophilic and lipophilic parts.' },
+      { q:'Which statement about skin-surface pH is most accurate?', a:['It is always exactly 7','It is commonly mildly acidic, but varies','It is always strongly alkaline'], correct:1, why:'Skin-surface pH is often reported around 4.5–5.5, but it varies with many factors.' }
+    ];
+    let current = 0, score = 0, answered = false;
+    const questionEl = document.getElementById('question');
+    const answersEl = document.getElementById('answers');
+    const feedback = document.getElementById('feedback');
+    const nextBtn = document.getElementById('nextBtn');
+    const progress = document.getElementById('quizProgress');
+    const scoreEl = document.getElementById('score');
+    function renderQuestion() {
+      answered = false;
+      const item = questions[current];
+      progress.textContent = `QUESTION ${current + 1} OF ${questions.length}`;
+      questionEl.textContent = item.q;
+      feedback.textContent = '';
+      nextBtn.disabled = true;
+      nextBtn.textContent = current === questions.length - 1 ? 'See result ↗' : 'Next question →';
+      answersEl.innerHTML = '';
+      item.a.forEach((answer, index) => {
+        const button = document.createElement('button');
+        button.className = 'answer';
+        button.textContent = answer;
+        button.addEventListener('click', () => chooseAnswer(index, button));
+        answersEl.appendChild(button);
+      });
+    }
+    function chooseAnswer(index, button) {
+      if (answered) return;
+      answered = true;
+      const item = questions[current];
+      const buttons = [...answersEl.querySelectorAll('button')];
+      buttons.forEach((b, i) => {
+        b.disabled = true;
+        if (i === item.correct) b.classList.add('correct');
+      });
+      if (index === item.correct) {
+        score++;
+        button.classList.add('correct');
+        feedback.textContent = 'Correct! ' + item.why;
+      } else {
+        button.classList.add('wrong');
+        feedback.textContent = 'Not quite. ' + item.why;
+      }
+      scoreEl.textContent = `Score: ${score}`;
+      nextBtn.disabled = false;
+    }
+    nextBtn.addEventListener('click', () => {
+      if (!answered) return;
+      if (current < questions.length - 1) {
+        current++;
+        renderQuestion();
+      } else {
+        progress.textContent = 'LAB COMPLETE';
+        questionEl.textContent = `You scored ${score} out of ${questions.length}!`;
+        answersEl.innerHTML = '';
+        feedback.textContent = 'Thanks for exploring the chemistry of skincare. Select “Try again” to replay the quiz.';
+        nextBtn.textContent = 'Try again ↻';
+        nextBtn.disabled = false;
+        nextBtn.onclick = () => { current = 0; score = 0; scoreEl.textContent = 'Score: 0'; nextBtn.onclick = null; renderQuestion(); };
+      }
+    });
+    renderQuestion();
+  </script>
+</body>
+</html>
